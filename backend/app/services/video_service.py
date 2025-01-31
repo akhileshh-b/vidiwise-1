@@ -17,26 +17,18 @@ from PIL import Image
 import sys
 from doctr.io import DocumentFile
 from doctr.models import ocr_predictor
-from app.services.gemini_service import GeminiChatbot
-from dotenv import load_dotenv
-from pathlib import Path
-
-# Load environment variables
-load_dotenv()
+from .gemini_service import GeminiChatbot
+from app.core.config import STORAGE_DIR, GEMINI_API_KEY
 
 # Add the parent directory to Python path
-current_dir = Path(__file__).resolve().parent
-parent_dir = current_dir.parent.parent
-sys.path.append(str(parent_dir))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-gemini_chatbot = GeminiChatbot(os.getenv("GEMINI_API_KEY"))
-
 class VideoService:
     def __init__(self):
-        self.base_output_dir = 'video_findings'
+        self.base_output_dir = STORAGE_DIR
         os.makedirs(self.base_output_dir, exist_ok=True)
         
         self.ydl_opts = {
@@ -76,6 +68,9 @@ class VideoService:
         except Exception as e:
             logger.error(f"Failed to initialize DocTR: {str(e)}")
             raise
+
+        # Initialize gemini chatbot with key from config
+        self.gemini_chatbot = GeminiChatbot()
 
     def extract_features(self, frame):
         try:
@@ -399,7 +394,7 @@ class VideoService:
                 f.write(combined_transcript)
 
             # Generate and save title
-            title = gemini_chatbot.generate_title(combined_transcript)
+            title = self.gemini_chatbot.generate_title(combined_transcript)
             title_path = os.path.join(video_dir, 'title.txt')
             with open(title_path, 'w', encoding='utf-8') as f:
                 f.write(title)

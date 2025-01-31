@@ -11,15 +11,12 @@ from app.services.video_service import VideoService
 from app.services.gemini_service import GeminiChatbot
 import shutil
 from typing import Literal
-from dotenv import load_dotenv
+from app.core.config import GEMINI_API_KEY, API_CORS_ORIGINS, STORAGE_DIR
 
-# Load environment variables
-load_dotenv()
 
 # Add the parent directory to Python path
 current_dir = Path(__file__).resolve().parent
-parent_dir = current_dir.parent
-sys.path.append(str(parent_dir))
+sys.path.append(str(current_dir))
 
 app = FastAPI()
 logging.basicConfig(level=logging.DEBUG)
@@ -27,15 +24,12 @@ logger = logging.getLogger(__name__)
 
 # Initialize VideoService instance
 video_service = VideoService()
-gemini_chatbot = GeminiChatbot(os.getenv("GEMINI_API_KEY"))
+gemini_chatbot = GeminiChatbot()
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://vidiwise.vercel.app",
-        "http://localhost:3000"
-    ],
+    allow_origins=API_CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,9 +39,9 @@ app.add_middleware(
 video_processing_status = {}
 
 # At the start of the app
-if not os.path.exists("video_findings"):
-    os.makedirs("video_findings")
-    logger.info("Created video_findings directory")
+if not os.path.exists(STORAGE_DIR):
+    os.makedirs(STORAGE_DIR)
+    logger.info(f"Created {STORAGE_DIR} directory")
 
 class VideoRequest(BaseModel):
     url: HttpUrl
@@ -130,7 +124,7 @@ async def start_chat(request: ChatRequest):
             raise HTTPException(status_code=400, detail="Video processing not completed")
 
         # Construct path to transcript file using video ID
-        transcript_path = os.path.join("video_findings", video_id, "video_transcript.txt")
+        transcript_path = os.path.join(STORAGE_DIR, video_id, "video_transcript.txt")
         logger.info(f"Looking for transcript at: {transcript_path}")
         
         if not os.path.exists(transcript_path):
@@ -164,17 +158,17 @@ async def health_check():
 async def get_video_history():
     try:
         # Ensure video_findings directory exists
-        if not os.path.exists("video_findings"):
+        if not os.path.exists(STORAGE_DIR):
             return []
         
         # Get all subdirectories in video_findings
-        video_dirs = [d for d in os.listdir("video_findings") 
-                     if os.path.isdir(os.path.join("video_findings", d))]
+        video_dirs = [d for d in os.listdir(STORAGE_DIR) 
+                     if os.path.isdir(os.path.join(STORAGE_DIR, d))]
         
         history = []
         for video_id in video_dirs:
             try:
-                video_dir = os.path.join("video_findings", video_id)
+                video_dir = os.path.join(STORAGE_DIR, video_id)
                 
                 # Check if this is a complete video directory
                 transcript_path = os.path.join(video_dir, "video_transcript.txt")
@@ -219,7 +213,7 @@ async def get_video_history():
 @app.post("/load-historical-video/{video_id}")
 async def load_historical_video(video_id: str):
     try:
-        video_dir = os.path.join("video_findings", video_id)
+        video_dir = os.path.join(STORAGE_DIR, video_id)
         if not os.path.exists(video_dir):
             raise HTTPException(status_code=404, detail="Video not found")
 
@@ -242,7 +236,7 @@ async def update_title(request: TitleUpdateRequest):
     try:
         logger.info(f"Attempting to update title for video {request.videoId} to: {request.newTitle}")
         
-        video_dir = os.path.join("video_findings", request.videoId)
+        video_dir = os.path.join(STORAGE_DIR, request.videoId)
         logger.info(f"Looking for video directory at: {video_dir}")
         
         if not os.path.exists(video_dir):
@@ -273,7 +267,7 @@ async def update_title(request: TitleUpdateRequest):
 @app.get("/video-title/{video_id}")
 async def get_video_title(video_id: str):
     try:
-        video_dir = os.path.join("video_findings", video_id)
+        video_dir = os.path.join(STORAGE_DIR, video_id)
         title_path = os.path.join(video_dir, "title.txt")
         
         if os.path.exists(title_path):

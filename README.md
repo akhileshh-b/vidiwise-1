@@ -1,63 +1,96 @@
-# Vidiwise
+# Vidiwise - AI Video Analysis Tool
 
-An AI-powered video analysis tool that generates insights and enables interactive conversations about video content.
+An AI-powered video analysis tool that provides intelligent insights and interactive chat capabilities for YouTube videos.
 
-## Local Development
+## Features
 
-### Backend Setup
+- 🎥 YouTube video analysis
+- 🤖 AI-powered chat interface
+- 🔍 Advanced visual analysis mode
+- 📚 Video history tracking
+- ✏️ Customizable titles
+
+## Tech Stack
+
+- **Backend**: FastAPI, Python
+- **Frontend**: React, TailwindCSS
+- **ML/AI**: PyTorch, Whisper, DocTR
+- **Database**: File-based storage
+
+## Prerequisites
+
+- Python 3.8+
+- Node.js 16+
+- npm 8+
+- Git
+
+## Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/vidiwise.git
+cd vidiwise
+```
+
+2. Backend Setup
 ```bash
 cd backend
-
-# Create and activate virtual environment
 python -m venv venv
-venv/Scripts/activate
 
-# Install dependencies
+# Windows
+venv\Scripts\activate
+# Unix/macOS
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-### Configure Environment Variables
-Create a `.env` file in the backend directory:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
+3. Frontend Setup
+```bash
+cd frontend
+npm install
 ```
-Get your Gemini API key from: https://aistudio.google.com/
 
-### Start Backend
+4. Environment Setup
+```bash
+# Copy example env file
+cp backend/.env.example backend/.env
+# Edit .env with your configurations
+```
+
+## Running Locally
+
+1. Start Backend
 ```bash
 cd backend
 python run.py
 ```
 
-### Frontend Setup
+2. Start Frontend
 ```bash
 cd frontend
-npm install
 npm start
 ```
 
-## Deployment
+3. Visit `http://localhost:3000`
 
-### Backend (Render.com)
-1. Create a new Web Service on Render
-2. Connect your GitHub repository
-3. Configure environment variables:
-   - GEMINI_API_KEY
-   - PYTHON_VERSION=3.9
-   - PORT=8080
+## Environment Variables
 
-### Frontend (Vercel)
-1. Create a new project on Vercel
-2. Import your GitHub repository
-3. Configure environment variable:
-   - REACT_APP_API_URL=your_backend_url
+Required environment variables:
 
-## Features
-- Video analysis and insights generation
-- Interactive AI chat about video content
-- Title management
-- Video history tracking
+- `GEMINI_API_KEY`: Google Gemini API key
+- `FRONTEND_URL`: Frontend URL for CORS
+- `API_PORT`: Backend port (default: 8080)
 
-## Live Demo
-Backend: https://your-backend.onrender.com
-Frontend: https://your-frontend.vercel.app
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+MIT License - see the [LICENSE](LICENSE) file for details
+

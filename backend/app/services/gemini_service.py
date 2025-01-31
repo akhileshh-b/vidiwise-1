@@ -2,13 +2,14 @@ import requests
 import json
 import os
 import logging
+from app.core.config import GEMINI_API_KEY
 
 logger = logging.getLogger(__name__)
 
 class GeminiChatbot:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-        self.api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={api_key}"
+    def __init__(self):
+        self.api_key = GEMINI_API_KEY
+        self.api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={self.api_key}"
         self.transcript_content = None
 
     def read_transcript(self, file_path: str) -> bool:
