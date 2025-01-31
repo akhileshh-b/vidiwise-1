@@ -33,7 +33,7 @@ gemini_chatbot = GeminiChatbot(os.getenv("GEMINI_API_KEY"))
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://your-frontend-domain.vercel.app",
+        "https://vidiwise.vercel.app",
         "http://localhost:3000"
     ],
     allow_credentials=True,
