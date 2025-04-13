@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 export default function VideoSummary({ videoId }) {
     const [summary, setSummary] = useState('');
@@ -16,7 +17,7 @@ export default function VideoSummary({ videoId }) {
             setLoading(true);
             setError(null);
             
-            const response = await fetch('http://localhost:8080/start-chat', {
+            const response = await fetch(`${API_URL}/start-chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

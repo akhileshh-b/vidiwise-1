@@ -5,6 +5,7 @@ import EmbeddedVideo from './components/EmbeddedVideo';
 import VideoSummary from './components/VideoSummary';
 import VideoHistory from './components/VideoHistory';
 import VideoTitle from './components/VideoTitle';
+import API_URL from './config';
 
 function App() {
   const [videoId, setVideoId] = useState(null);
@@ -15,7 +16,7 @@ function App() {
 
   const fetchVideoTitle = async (videoId) => {
     try {
-      const response = await fetch(`http://localhost:8080/video-title/${videoId}`);
+      const response = await fetch(`${API_URL}/video-title/${videoId}`);
       if (response.ok) {
         const data = await response.json();
         setCurrentTitle(data.title);

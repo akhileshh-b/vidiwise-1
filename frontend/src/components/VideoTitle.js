@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 export default function VideoTitle({ title, videoId, onTitleUpdate }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -22,7 +23,7 @@ export default function VideoTitle({ title, videoId, onTitleUpdate }) {
 
         try {
             console.log('Updating title for video:', videoId); // Debug log
-            const response = await fetch('http://localhost:8080/update-title', {
+            const response = await fetch(`${API_URL}/update-title`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

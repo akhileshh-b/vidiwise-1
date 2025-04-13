@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import API_URL from '../config';
 
 export default function ChatInterface({ videoId }) {
     const [messages, setMessages] = useState([]);
@@ -26,7 +27,7 @@ export default function ChatInterface({ videoId }) {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/start-chat', {
+            const response = await fetch(`${API_URL}/start-chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
