@@ -1,1 +1,1 @@
-web: uvicorn app.main:app --host=0.0.0.0 --port=${PORT:-8080} 
+web: python -X dev -X faulthandler -X tracemalloc=5 -X dev -X faulthandler -X tracemalloc=5 uvicorn app.main:app --host=0.0.0.0 --port=$PORT --workers=1 --limit-concurrency=10 
