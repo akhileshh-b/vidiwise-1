@@ -1,63 +1,139 @@
-# Vidiwise
+# Vidiwise - Video Analysis Tool
 
-An AI-powered video analysis tool that generates insights and enables interactive conversations about video content.
+A modern web application for analyzing YouTube videos using AI to provide intelligent insights and interactive chat capabilities.
 
-## Local Development
+## Features
 
-### Backend Setup
-```bash
-cd backend
+- YouTube video analysis
+- AI-powered chat interface
+- Advanced mode with visual analysis
+- Video history tracking
+- Customizable titles
 
-# Create and activate virtual environment
-python -m venv venv
-venv/Scripts/activate
+## Prerequisites
 
-# Install dependencies
-pip install -r requirements.txt
-```
+- Python 3.8+
+- Node.js 16+
+- npm 8+
+- Google Gemini API key
 
-### Configure Environment Variables
-Create a `.env` file in the backend directory:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-Get your Gemini API key from: https://aistudio.google.com/
+## Local Development Setup
 
-### Start Backend
-```bash
-cd backend
-python run.py
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/vidiwise.git
+   cd vidiwise
+   ```
 
-### Frontend Setup
-```bash
-cd frontend
-npm install
-npm start
-```
+2. **Backend Setup**
+   ```bash
+   cd backend
+   python -m venv venv
+
+   # Activate virtual environment
+   # Windows:
+   venv\Scripts\activate
+   # Unix/macOS:
+   source venv/bin/activate
+
+   # Install dependencies
+   pip install -r requirements.txt
+
+   # Create .env file from example
+   cp .env.example .env
+   # Edit .env and add your GEMINI_API_KEY
+
+   # Start backend server
+   python run.py
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+4. Open `http://localhost:3000` in your browser
 
 ## Deployment
 
-### Backend (Render.com)
-1. Create a new Web Service on Render
-2. Connect your GitHub repository
-3. Configure environment variables:
-   - GEMINI_API_KEY
-   - PYTHON_VERSION=3.9
-   - PORT=8080
+### Backend Deployment (Heroku)
 
-### Frontend (Vercel)
-1. Create a new project on Vercel
-2. Import your GitHub repository
-3. Configure environment variable:
-   - REACT_APP_API_URL=your_backend_url
+1. **Create a Heroku account** at [heroku.com](https://heroku.com)
 
-## Features
-- Video analysis and insights generation
-- Interactive AI chat about video content
-- Title management
-- Video history tracking
+2. **Install Heroku CLI** from [devcenter.heroku.com](https://devcenter.heroku.com/articles/heroku-cli)
 
-## Live Demo
-Backend: https://your-backend.onrender.com
-Frontend: https://your-frontend.vercel.app
+3. **Deploy backend**
+   ```bash
+   cd backend
+   heroku login
+   heroku create vidiwise-backend
+   git subtree push --prefix backend heroku main
+   ```
+
+4. **Set environment variables**
+   ```bash
+   heroku config:set GEMINI_API_KEY=your_api_key
+   heroku config:set FRONTEND_URL=https://your-frontend-url.com
+   ```
+
+### Frontend Deployment (Vercel)
+
+1. **Create a Vercel account** at [vercel.com](https://vercel.com)
+
+2. **Install Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+3. **Deploy frontend**
+   ```bash
+   cd frontend
+   vercel login
+   vercel
+   ```
+
+4. **Configure environment variables** in Vercel dashboard:
+   - `REACT_APP_API_URL`: Your backend API URL
+
+## Project Structure
+
+```
+.
+├── backend/
+│   ├── app/
+│   │   ├── core/          # Core configuration
+│   │   ├── services/      # Business logic
+│   │   └── main.py        # FastAPI application
+│   ├── video_findings/    # Video storage
+│   └── requirements.txt
+│
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── components/    # React components
+    │   └── index.js
+    └── package.json
+```
+
+## Environment Variables
+
+### Backend (.env)
+```env
+GEMINI_API_KEY=your_api_key_here
+API_HOST=0.0.0.0
+API_PORT=8080
+FRONTEND_URL=http://localhost:3000
+STORAGE_DIR=video_findings
+```
+
+### Frontend (.env)
+```env
+REACT_APP_API_URL=http://localhost:8080
+```
+
+## License
+
+MIT
+

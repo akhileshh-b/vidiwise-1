@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-
 export default function VideoHistory({ onSelectVideo }) {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchHistory = async () => {
         try {
-            const response = await fetch(`${API_URL}/video-history`);
+            const response = await fetch('http://localhost:8080/video-history');
             if (response.ok) {
                 const data = await response.json();
                 setHistory(data);
@@ -29,7 +27,7 @@ export default function VideoHistory({ onSelectVideo }) {
 
     const handleVideoSelect = async (videoId, mode, title) => {
         try {
-            const response = await fetch(`${API_URL}/load-historical-video/${videoId}`, {
+            const response = await fetch(`http://localhost:8080/load-historical-video/${videoId}`, {
                 method: 'POST'
             });
 

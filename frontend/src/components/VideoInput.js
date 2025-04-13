@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-// Replace hardcoded URLs with environment variable
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-
 export default function VideoInput({ onVideoProcess, onStartContent, onModeChange }) {
     const [url, setUrl] = useState('');
     const [mode, setMode] = useState('normal');
@@ -15,7 +12,7 @@ export default function VideoInput({ onVideoProcess, onStartContent, onModeChang
         setError('');
 
         try {
-            const response = await fetch(`${API_URL}/process-video`, {
+            const response = await fetch('http://localhost:8080/process-video', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,12 +38,12 @@ export default function VideoInput({ onVideoProcess, onStartContent, onModeChang
 
     const checkStatus = async (videoId) => {
         try {
-            const response = await fetch(`${API_URL}/video-status/${videoId}`);
+            const response = await fetch(`http://localhost:8080/video-status/${videoId}`);
             const data = await response.json();
 
             if (data.status === 'completed') {
                 setIsProcessing(false);
-                const titleResponse = await fetch(`${API_URL}/video-title/${videoId}`);
+                const titleResponse = await fetch(`http://localhost:8080/video-title/${videoId}`);
                 if (titleResponse.ok) {
                     const titleData = await titleResponse.json();
                     onStartContent(true, titleData.title);

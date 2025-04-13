@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-
 export default function VideoTitle({ title, videoId, onTitleUpdate }) {
     const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState(title || 'Untitled Video');
@@ -24,7 +22,7 @@ export default function VideoTitle({ title, videoId, onTitleUpdate }) {
 
         try {
             console.log('Updating title for video:', videoId); // Debug log
-            const response = await fetch(`${API_URL}/update-title`, {
+            const response = await fetch('http://localhost:8080/update-title', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
